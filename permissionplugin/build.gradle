@@ -24,7 +24,7 @@ publish {
     groupId = rootProject.ext.bintray.group
     artifactId = 'simplepermissionplugin'// bintray创建的package
     publishVersion = rootProject.ext.bintray.version
-    desc = 'SimplePermission权限申请库核心代码'
+    desc = 'SimplePermission权限申请库自动生成代码gradle插件'
 }
 
 compileGroovy {
