@@ -1,8 +1,14 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 
+//加载资源
+Properties properties = new Properties()
+InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream();
+properties.load(inputStream)
 
 publish {
+    bintrayUser = properties.getProperty("bintrayUser")
+    bintrayKey =  properties.getProperty("bintrayKey")
     userOrg = 'ykbjson'      // bintray注册的用户名
     groupId = rootProject.ext.bintray.group
     artifactId = 'simplepermission'// bintray创建的package
@@ -18,6 +24,9 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 

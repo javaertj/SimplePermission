@@ -1,25 +1,13 @@
 apply plugin: 'groovy'
 apply plugin: 'com.novoda.bintray-release'
-apply plugin: 'maven'
-
-//group和version在后面使用自定义插件的时候会用到
-group = 'com.ykbjson.simplepermission'
-version = '1.0.0'
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            //提交到远程服务器：
-            // repository(url: "http://www.xxx.com/repos") {
-            //    authentication(userName: "admin", password: "admin")
-            // }
-            //本地的Maven地址设置为D:/repos
-            repository(url: uri('/Users/yanan/Desktop/android_project/mavenlocal/'))
-        }
-    }
-}
+//加载资源
+Properties properties = new Properties()
+InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream();
+properties.load(inputStream)
 
 publish {
+    bintrayUser = properties.getProperty("bintrayUser")
+    bintrayKey =  properties.getProperty("bintrayKey")
     userOrg = 'ykbjson'      // bintray注册的用户名
     groupId = rootProject.ext.bintray.group
     artifactId = 'simplepermissionplugin'// bintray创建的package
@@ -42,6 +30,3 @@ dependencies {
     compile 'org.javassist:javassist:3.23.0-GA'
 }
 
-repositories {
-    mavenCentral()
-}
