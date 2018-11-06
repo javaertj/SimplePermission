@@ -1,0 +1,40 @@
+apply plugin: 'java-library'
+apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'maven'
+
+group = 'com.ykbjson.simplepermission.ano'
+version = '1.0.0'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            //提交到远程服务器：
+            // repository(url: "http://www.xxx.com/repos") {
+            //    authentication(userName: "admin", password: "admin")
+            // }
+            //本地的Maven地址设置为D:/repos
+            repository(url: uri('/Users/yanan/Desktop/android_project/mavenlocal/'))
+        }
+    }
+}
+
+publish {
+    userOrg = 'ykbjson'      // bintray注册的用户名
+    groupId = rootProject.ext.bintray.group
+    artifactId = 'simplepermission_ano'// bintray创建的package
+    publishVersion = rootProject.ext.bintray.version
+    desc = 'SimplePermission权限申请库注解'
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+repositories {
+    mavenCentral()
+}
+
+

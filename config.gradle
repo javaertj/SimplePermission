@@ -1,0 +1,139 @@
+ext {
+    plugins = [
+            library    : 'com.android.library',
+            application: 'com.android.application',
+            maven      : 'com.github.dcendents.android-maven',
+            bintray    : 'com.jfrog.bintray',
+            apt        : 'com.neenbedankt.android-apt'
+    ]
+
+    android = [
+            applicationId    : 'com.ykbjson.app.simplepermission',
+            compileSdkVersion: 27,
+            buildToolsVersion: '27.0.3',
+
+            minSdkVersion    : 17,
+            targetSdkVersion : 27,
+
+            versionCode      : 100,
+            versionName      : '1.0.0',
+    ]
+
+    bintray = [
+            version       : '1.0.0',
+
+            siteUrl       : 'https://github.com/ykbjson/SimplePermission',
+            gitUrl        : 'https://github.com/ykbjson/SimplePermission.git',
+
+            group         : 'com.ykbjson.simplepermission',
+
+            // project
+            packaging     : 'aar',
+            name          : 'SimplePermission',
+            description   : 'SimplePermission For Android',
+
+            // project.license
+            licenseName   : 'The Apache Software License, Version 2.0',
+            licenseUrl    : 'http://www.apache.org/licenses/LICENSE-2.0.txt',
+
+            // project.developers
+            developerId   : 'ykbjson',
+            developerName : 'ykbjson',
+            developerEmail: 'ykbdevelop@gmail.com',
+
+            // bintray
+            binrayLibrary : "simplepermission",
+            bintrayRepo   : "maven",
+            bintrayUser   : 'ykbjson',
+            bintrayLicense: "Apache-2.0"
+    ]
+    def rxBindingVersion = '2.1.1'
+    def androidVersion = "27.0.2"
+    dependencies = [
+            supportV4             : "com.android.support:support-v4:$androidVersion",
+            appCompat             : "com.android.support:appcompat-v7:$androidVersion",
+            design                : "com.android.support:design:$androidVersion",
+            cardView              : "com.android.support:cardview-v7:$androidVersion",
+            recyclerView          : "com.android.support:recyclerview-v7:$androidVersion",
+            supportAnnotations    : "com.android.support:support-annotations:$androidVersion",
+            supportMultidex       : 'com.android.support:multidex:1.0.1',
+
+            loading               : 'com.yanzhenjie:loading:1.0.2',
+            swipeRecyclerView     : 'com.yanzhenjie:recyclerview-swipe:1.1.3',
+
+            RxBinding             : "com.jakewharton.rxbinding2:rxbinding:$rxBindingVersion",
+            RxBindingSupportV4    : "com.jakewharton.rxbinding2:rxbinding-support-v4:$rxBindingVersion",
+            RxBindingAppcompatV7  : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:$rxBindingVersion",
+            RxBindingRecycleViewV7: "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:$rxBindingVersion",
+            RxBindingDesign       : "com.jakewharton.rxbinding2:rxbinding-design:$rxBindingVersion",
+            RxBindingLeanBackv17  : "com.jakewharton.rxbinding2:rxbinding-leanback-v17:$rxBindingVersion",
+
+            //rest+rxAndroid
+            RXAndroid             : 'io.reactivex.rxjava2:rxandroid:2.0.2',
+            RXJava                : 'io.reactivex.rxjava2:rxjava:2.1.11',
+            // Retrofit2
+            retrofit2             : 'com.squareup.retrofit2:retrofit:2.4.0',
+            // Retrofit2适配RxJava
+            retrofit2RXJavaAdapter: 'com.squareup.retrofit2:adapter-rxjava:2.4.0',
+            // Retrofit2 Gson数据转换器
+            retrofit2GsonConverter: 'com.squareup.retrofit2:converter-gson:2.4.0',
+            //  Retrofit2日志拦截器
+            retrofit2Interceptor  : 'com.squareup.okhttp3:logging-interceptor:3.10.0',
+
+            glide                 : 'com.github.bumptech.glide:glide:3.7.0',
+            //下拉刷新
+            ultraptr              : 'in.srain.cube:ultra-ptr:1.0.11',
+            //ViewHelper
+            nineoldandroids       : 'com.nineoldandroids:library:2.4.0',
+            //photoview
+            photoview             : 'com.github.chrisbanes.photoview:library:1.2.4',
+            //圆角
+            roundedimageview      : 'com.makeramen:roundedimageview:2.2.1',
+            //圆形图像
+            circleimageview       : 'de.hdodenhof:circleimageview:2.0.0',
+            //上传图片
+            upyun                 : 'com.upyun:upyun-android-sdk:2.0.4',
+            //权限库
+            permissiongen         : 'com.lovedise:permissiongen:0.0.6',
+            //图片选择器
+            picasso               : 'com.squareup.picasso:picasso:2.4.0',
+            //okhttp-urlconnection
+            okhttpUrlconnection   : 'com.squareup.okhttp:okhttp-urlconnection:1.6.0',
+            //bus
+            xbus                  : 'com.mcxiaoke.xbus:bus:1.0.1',
+            //sweetDialog
+            sweetalert            : 'cn.pedant.sweetalert:library:1.3',
+            //OKHTTP
+            okhttp3               : 'com.squareup.okhttp3:okhttp:3.10.0',
+            //imageloader
+            imageloader           : 'com.nostra13.universalimageloader:universal-image-loader:1.9.5',
+            //tablayout
+            tablayout             : 'com.flyco.tablayout:FlycoTabLayout_Lib:2.0.8@aar',
+            //富文本查看器
+            richtext              : 'com.zzhoujay.richtext:richtext:2.3.7',
+            //FlycoDialog
+            FlycoDialog           : 'com.flyco.dialog:FlycoDialog_Lib:1.2.6@aar',
+            //阻尼效果
+            overscroll            : 'me.everything:overscroll-decor-android:1.0.1',
+            //进度条
+            RoundCornerProgressBar: 'com.akexorcist:RoundCornerProgressBar:2.0.3',
+            //标签
+            tagcloudview          : 'com.github.kingideayou:tagcloudview:1.0.2',
+            //热补丁修复框架tinker
+            tinker                : 'com.tencent.tinker:tinker-android-lib:1.9.1',
+            tinkerAnno                : 'com.tencent.tinker:tinker-android-anno:1.9.1',
+            //growingio
+            growingio             : 'com.growingio.android:vds-android-agent:0.9.103@aar',
+            //标签2
+            androidtagview        : 'co.lujun:androidtagview:1.0.6',
+            //butterknife
+            butterknife           : 'com.jakewharton:butterknife:8.8.1',
+            //图片选择器
+            PictureSelector       : 'com.github.LuckSiege.PictureSelector:picture_library:v2.1.0',
+
+
+            fastjson              : 'com.alibaba:fastjson:1.1.57.android',
+            gson                  : 'com.google.code.gson:gson:2.8.2',
+
+    ]
+}

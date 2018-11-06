@@ -1,0 +1,29 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+
+
+publish {
+    userOrg = 'ykbjson'      // bintray注册的用户名
+    groupId = rootProject.ext.bintray.group
+    artifactId = 'simplepermission'// bintray创建的package
+    publishVersion = rootProject.ext.bintray.version
+    desc = 'SimplePermission权限申请库核心代码'
+}
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation rootProject.ext.dependencies.appCompat
+    implementation rootProject.ext.dependencies.RXAndroid
+    implementation rootProject.ext.dependencies.RXJava
+}

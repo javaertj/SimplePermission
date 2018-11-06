@@ -1,0 +1,47 @@
+apply plugin: 'groovy'
+apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'maven'
+
+//group和version在后面使用自定义插件的时候会用到
+group = 'com.ykbjson.simplepermission'
+version = '1.0.0'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            //提交到远程服务器：
+            // repository(url: "http://www.xxx.com/repos") {
+            //    authentication(userName: "admin", password: "admin")
+            // }
+            //本地的Maven地址设置为D:/repos
+            repository(url: uri('/Users/yanan/Desktop/android_project/mavenlocal/'))
+        }
+    }
+}
+
+publish {
+    userOrg = 'ykbjson'      // bintray注册的用户名
+    groupId = rootProject.ext.bintray.group
+    artifactId = 'simplepermissionplugin'// bintray创建的package
+    publishVersion = rootProject.ext.bintray.version
+    desc = 'SimplePermission权限申请库核心代码'
+}
+
+compileGroovy {
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+}
+
+dependencies {
+    //gradle sdk
+    compile gradleApi()
+    //groovy sdk
+    compile localGroovy()
+    compile project(':simplepermission_ano')
+    compile 'com.android.tools.build:gradle:3.1.1'
+    compile 'org.javassist:javassist:3.23.0-GA'
+}
+
+repositories {
+    mavenCentral()
+}

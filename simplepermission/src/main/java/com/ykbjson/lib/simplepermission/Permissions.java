@@ -1,0 +1,29 @@
+/**
+ * Copyright 2015 Anthony Restaino
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ either express or implied. See the License for the specific language governing
+ permissions and limitations under the License.
+ */
+package com.ykbjson.lib.simplepermission;
+
+/**
+ * 包名：com.ykbjson.lib.simplepermission
+ * 描述：Enum class to handle the different states
+ * of permissions since the PackageManager only
+ * has a granted and denied state.
+ * 创建者：yankebin
+ * 日期：2017/5/12
+ */
+enum Permissions {
+  GRANTED,
+  DENIED,
+  NOT_FOUND,
+  USER_DENIED_FOREVER
+}
