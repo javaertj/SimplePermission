@@ -132,7 +132,7 @@ public class SimplePermissionPluginInject {
                 //加入存储方法的map结构
                 CtField ctField = CtField.make(REQUEST_PERMISSION_METHOD_PARAMS_INJECT_CONTENT, c)
                 c.addField(ctField)
-                //查找是否声明或重写了onRequestPermissionsResult方法
+                //检测Activity或Fragment是否声明或重写了onRequestPermissionsResult方法
                 CtMethod notifyMethod = findMethodByName(c, INJECT_PERMISSION_NOTIFY_METHOD_NAME)
                 //如果已经重写，则在super之前插入代码
                 if (null != notifyMethod) {
@@ -156,13 +156,14 @@ public class SimplePermissionPluginInject {
                     notifyMethod = CtNewMethod.make(methodBuilder.toString(), c)
                     c.addMethod(notifyMethod)
                 }
-                //在加了PermissionRequest注解的方法内插入权限请求的代码
+                //在加了PermissionRequest注解的方法内插入权限请求的代码，根据PermissionRequest.needReCall来决定是否需要在权限回调成功的方法里插入代码
                 for (CtMethod method : c.getDeclaredMethods()) {
                     PermissionRequest permissionRequest = method.getAnnotation(PermissionRequest.class)
                     if (null == permissionRequest) {
                         continue
                     }
                     project.logger.error "SimplePermission-----> find requestPermission method : " + method.longName
+                    //因为javassist不支持"{"与"}"有多行数据生成数组，所以要用一个String[] xx=new String[n]形式的数组把权限存储下来
                     StringBuilder requestMethodBuilder = new StringBuilder()
                             .append("String []requestPermissions = new String[")
                             .append(permissionRequest.requestPermissions().length)
@@ -176,23 +177,57 @@ public class SimplePermissionPluginInject {
                                 .append("\";\n")
                         eachIndex++
                     }
-                    //存储方法参数
-                    CtClass[] mParameterTypes = method.getParameterTypes()
-                    if (null != mParameterTypes && mParameterTypes.length > 0) {
-                        requestMethodBuilder.append("final boolean hasPermissions = PermissionsManager.getInstance().hasAllPermissions(\$0,requestPermissions);\n")
-                                .append("if (!hasPermissions) {\n")
-                                .append("List params = new java.util.ArrayList();\n")
-                        for (int k = 0; k < mParameterTypes.length; k++) {
-                            requestMethodBuilder.append("params.add(\$")
-                                    .append(k + 1)
+                    requestMethodBuilder.append("final boolean hasPermissions = PermissionsManager.getInstance().hasAllPermissions(\$0,requestPermissions);\n")
+                            .append("if (!hasPermissions) {\n")
+                    //如果需要在权限申请成功后继续执行此方法的逻辑代码，则需要存储参数
+                    if (permissionRequest.needReCall()) {
+                        //开始存储方法参数
+                        CtClass[] mParameterTypes = method.getParameterTypes()
+                        //权限申请成功的方法插入代码
+                        CtMethod onSuccessMethod = c.getDeclaredMethod("onSuccess", CtClass.intType)
+                        if (null != onSuccessMethod) {
+                            StringBuilder onSuccessMethodBuilder = new StringBuilder("List params = requestPermissionMethodParams.get(Integer.valueOf(\$1));\n")
+                                    .append("if(\$1==")
+                                    .append(permissionRequest.requestCode())
+                                    .append("){\n")
+                                    .append(method.getName())
+                                    .append("(")
+                            if (null != mParameterTypes && mParameterTypes.length > 0) {
+                                for (int k = 0; k < mParameterTypes.length; k++) {
+                                    onSuccessMethodBuilder.append("(")
+                                            .append(mParameterTypes[0].name)
+                                            .append(")")
+                                            .append("params.get(")
+                                            .append(k)
+                                            .append(")")
+                                    if (k != mParameterTypes.length - 1) {
+                                        onSuccessMethodBuilder.append(",")
+                                    }
+                                }
+                            }
+                            onSuccessMethodBuilder.append()
                                     .append(");\n")
+                                    .append("return;\n")
+                                    .append("}\n")
+
+                            project.logger.error "SimplePermission-----> onSuccess method insert content :\n " + onSuccessMethodBuilder.toString()
+                            onSuccessMethod.insertBefore(onSuccessMethodBuilder.toString())
                         }
-                        requestMethodBuilder.append("requestPermissionMethodParams.put(")
-                                .append("Integer.valueOf(")
-                                .append(permissionRequest.requestCode())
-                                .append(")")
-                                .append(",")
-                                .append("params);\n")
+                        //在申请权限的方法内部插入存储参数的代码
+                        if (null != mParameterTypes && mParameterTypes.length > 0) {
+                            requestMethodBuilder.append("List params = new java.util.ArrayList();\n")
+                            for (int k = 0; k < mParameterTypes.length; k++) {
+                                requestMethodBuilder.append("params.add(\$")
+                                        .append(k + 1)
+                                        .append(");\n")
+                            }
+                            requestMethodBuilder.append("requestPermissionMethodParams.put(")
+                                    .append("Integer.valueOf(")
+                                    .append(permissionRequest.requestCode())
+                                    .append(")")
+                                    .append(",")
+                                    .append("params);\n")
+                        }
                     }
                     requestMethodBuilder.append("PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(")
                             .append(permissionRequest.requestCode())//requestCode
@@ -201,42 +236,13 @@ public class SimplePermissionPluginInject {
                             .append("\$0,")
                             .append("requestPermissions,")
                             .append("\$0);\n")
-                            .append("return;\n")
-                            .append("}\n")
+                    //申请权限的方法的代码逻辑需要等到权限申请成功后才能执行的话，这里要在申请权限的代码后加上return，所以这个库目前有一个限制：带返回参数的方法暂不支持
+                    if (permissionRequest.needReCall()) {
+                        requestMethodBuilder.append("return;\n")
+                    }
+                    requestMethodBuilder.append("}\n")
                     project.logger.error "SimplePermission-----> requestPermission method insert content :\n " + requestMethodBuilder.toString()
                     method.insertBefore(requestMethodBuilder.toString())
-
-                    //权限申请成功的方法插入代码
-                    CtMethod onSuccessMethod = c.getDeclaredMethod("onSuccess", CtClass.intType)
-                    if (null != onSuccessMethod) {
-                        StringBuilder onSuccessMethodBuilder = new StringBuilder("List params = requestPermissionMethodParams.get(Integer.valueOf(\$1));\n")
-                                .append("if(\$1==")
-                                .append(permissionRequest.requestCode())
-                                .append("){\n")
-                                .append(method.getName())
-                                .append("(")
-                        if (null != mParameterTypes && mParameterTypes.length > 0) {
-                            for (int k = 0; k < mParameterTypes.length; k++) {
-                                onSuccessMethodBuilder.append("(")
-                                        .append(mParameterTypes[0].name)
-                                        .append(")")
-                                        .append("params.get(")
-                                        .append(k)
-                                        .append(")")
-                                if (k != mParameterTypes.length - 1) {
-                                    onSuccessMethodBuilder.append(",")
-                                }
-                            }
-                        }
-                        onSuccessMethodBuilder.append()
-                                .append(");\n")
-                                .append("return;\n")
-                                .append("}\n")
-
-                        project.logger.error "SimplePermission-----> onSuccess method insert content :\n " + onSuccessMethodBuilder.toString()
-
-                        onSuccessMethod.insertBefore(onSuccessMethodBuilder.toString())
-                    }
                 }
 
                 c.writeFile(path)

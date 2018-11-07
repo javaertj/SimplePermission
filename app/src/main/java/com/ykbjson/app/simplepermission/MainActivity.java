@@ -1,5 +1,6 @@
 package com.ykbjson.app.simplepermission;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -13,7 +14,6 @@ import com.ykbjson.lib.simplepermission.ano.PermissionRequest;
 
 @PermissionNotify
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    static final String REQUEST_PERMISSIONS[] = new String[]{"android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"};
 
     private TextView mTextMessage;
 
@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @PermissionRequest(
             requestCode = 10010,
-            requestPermissions = {"android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"}
+            requestPermissions = {Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.READ_CONTACTS}
     )
     private void setText(String text) {
         mTextMessage.setText(text);

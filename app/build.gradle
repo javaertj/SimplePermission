@@ -24,8 +24,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':simplepermission_ano')
-    implementation project(':simplepermission')
+    implementation 'com.ykbjson.simplepermission:simplepermission:1.0.0'
+    implementation 'com.ykbjson.simplepermission:simplepermission_ano:1.0.0'
 
     implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.android.support:design:27.0.2'
