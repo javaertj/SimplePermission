@@ -5,7 +5,7 @@
 因为这个功能是基于gradle插件来实现的，所以和一般权限库有所不同,需要在你的工程根目录的build.gradle文件相似位置里加上如下代码（看有注释的地方）。当前最新版本为
 [ ![Download](https://api.bintray.com/packages/ykbjson/maven/simplepermissionplugin/images/download.svg) ](https://bintray.com/ykbjson/maven/simplepermissionplugin/_latestVersion)
 
-'
+
 
 	buildscript {
 	   repositories {
@@ -35,31 +35,31 @@
 	    }
 	}
 
-'
+
 
 然后在app module的build.gradle文件里引入apply simplepermissionplugin插件
 
-'
+
 
 	apply plugin: 'com.ykbjson.simplepermission'
 
-'
+
 
 最后在app module的build.gradle文件里引入simpleprmission库和simplepermission_ano库,即可大功告成
 
-'
+
 
 	implementation 'com.ykbjson.simplepermission:simplepermission:1.0.0'
     implementation 'com.ykbjson.simplepermission:simplepermission_ano:1.0.0'
 	
-'
+
 
 # 三、如何使用
 
 使用非常简单。
 首先，在需要申请权限的Activity或Fragment类上加上注解@PermissionNotify
 
-'
+
 
 	@PermissionNotify
 	public class MainActivity extends AppCompatActivity implements View.OnClickListener
@@ -82,12 +82,12 @@
 	    }
 	}
 
-'
+
 
 然后在Activity或Fragment的某个方法上加上注解@PermissionRequest
 
 
-'
+
 
 	  @PermissionRequest(
             requestCode = 10010,
@@ -100,11 +100,11 @@
         mTextMessage.setText(text);
     }
 
-'
+
 
 然后。。。。。。结束啦！！！！编译结束后其实MainActivity里的代码大致会变成如下的样子
 
-'
+
 
 	@PermissionNotify
 	public class MainActivity extends AppCompatActivity implements OnClickListener, PermissionsRequestCallback {
@@ -170,11 +170,13 @@
 
 
 
-'
+
+
 
 当然，如果你觉得使用注解会有诸多限制（请看下面第四条提到的“一些限制”）,你也可以直接使用simplepermission库来实现权限的申请，类似代码如下
 
-'
+
+
 
 	private void setText(final String text) {
         PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(0, this,
@@ -204,14 +206,13 @@
                         mTextMessage.setText(text);
                     }
                 });
-        mTextMessage.setText(text);
     }
 	
 
-'
+
 对于一些特殊权限，可能需要在Activit或Fragment重载onRequestPermissionsResult方法，并且在该方法内部加入PermissionsManager.getInstance().notifyPermissionsChange(permissions,grantResults),类似如下代码
 
-'
+
 
 	@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -220,7 +221,7 @@
     }
 
 
-'
+
 
 # 四、一些限制
 
