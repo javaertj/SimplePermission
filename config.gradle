@@ -20,7 +20,9 @@ ext {
     ]
 
     bintray = [
-            version       : '1.0.0',
+            plugVersion   : '1.0.0',
+            anoVersion    : '1.0.0',
+            libraryVersion: '1.0.0',
 
             siteUrl       : 'https://github.com/ykbjson/SimplePermission',
             gitUrl        : 'https://github.com/ykbjson/SimplePermission.git',
@@ -121,7 +123,7 @@ ext {
             tagcloudview          : 'com.github.kingideayou:tagcloudview:1.0.2',
             //热补丁修复框架tinker
             tinker                : 'com.tencent.tinker:tinker-android-lib:1.9.1',
-            tinkerAnno                : 'com.tencent.tinker:tinker-android-anno:1.9.1',
+            tinkerAnno            : 'com.tencent.tinker:tinker-android-anno:1.9.1',
             //growingio
             growingio             : 'com.growingio.android:vds-android-agent:0.9.103@aar',
             //标签2
