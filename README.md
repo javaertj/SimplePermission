@@ -62,8 +62,24 @@
 '
 
 	@PermissionNotify
-	public class MainActivity extends AppCompatActivity 
-	//省略代码...
+	public class MainActivity extends AppCompatActivity implements View.OnClickListener
+		private TextView mTextMessage;
+		protected void onCreate(Bundle savedInstanceState) {
+	        super.onCreate(savedInstanceState);
+	        setContentView(R.layout.activity_main);
+	        mTextMessage = (TextView) findViewById(R.id.message);
+	
+	        mTextMessage.setOnClickListener(this);
+    	}
+    	
+	    private void setText(final String text) {
+	        mTextMessage.setText(text);
+	    }
+	
+	    @Override
+	    public void onClick(View v) {
+	        setText("哈哈哈哈哈哈");
+	    }
 	}
 
 '
@@ -86,7 +102,75 @@
 
 '
 
-然后。。。。。。结束啦！！！！
+然后。。。。。。结束啦！！！！编译结束后其实MainActivity里的代码大致会变成如下的样子
+
+'
+
+	@PermissionNotify
+	public class MainActivity extends AppCompatActivity implements OnClickListener, PermissionsRequestCallback {
+	    private TextView mTextMessage;
+	   	 private final Map requestPermissionMethodParams = new HashMap();
+	
+	    public MainActivity() {
+	    }
+	
+	    protected void onCreate(Bundle savedInstanceState) {
+	        super.onCreate(savedInstanceState);
+	        this.setContentView(2131361818);
+	       
+	        this.mTextMessage.setOnClickListener(this);
+	    }
+	
+	    @PermissionRequest(
+	        requestCode = 10010,
+	        requestPermissions = {"android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.READ_CONTACTS"},
+	        needReCall = true
+	    )
+	    private void setText(String text) {
+	        String[] var2 = new String[]{"android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.READ_CONTACTS"};
+	        boolean var3 = PermissionsManager.getInstance().hasAllPermissions(this, var2);
+	        if (!var3) {
+	            ArrayList var4 = new ArrayList();
+	            var4.add(text);
+	            this.requestPermissionMethodParams.put(10010, var4);
+	            PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(10010, this, var2, this);
+	        } else {
+	            this.mTextMessage.setText(text);
+	        }
+	    }
+	
+	    public void onClick(View v) {
+	        this.setText("哈哈哈哈哈哈");
+	    }
+	
+	    public void onGranted(int var1, String var2) {
+	    }
+	
+	    public void onDenied(int var1, String var2) {
+	    }
+	
+	    public void onDeniedForever(int var1, String var2) {
+	    }
+	
+	    public void onFailure(int var1, String[] var2) {
+	    }
+	
+	    public void onSuccess(int var1) {
+	        Object var2 = this.requestPermissionMethodParams.get(var1);
+	        if (var1 == 10010) {
+	            this.setText((String)((List)var2).get(0));
+	        }
+	    }
+	
+	    public void onRequestPermissionsResult(int var1, String[] var2, int[] var3) {
+	        PermissionsManager.getInstance().notifyPermissionsChange(var2, var3);
+	        super.onRequestPermissionsResult(var1, var2, var3);
+	    }
+	}
+
+
+
+'
 
 当然，如果你觉得使用注解会有诸多限制（请看下面第四条提到的“一些限制”）,你也可以直接使用simplepermission库来实现权限的申请，类似代码如下
 
