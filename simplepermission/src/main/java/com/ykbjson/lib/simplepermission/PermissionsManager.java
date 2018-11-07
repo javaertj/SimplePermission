@@ -21,10 +21,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 包名：com.ykbjson.lib.simplepermission
- * 描述：A class to help you manage your permissions simply.
- * 创建者：yankebin
- * 日期：2017/5/12
+ * Desription：A class to help you manage your permissions simply.
+ * Creator：yankebin
+ * CreatedAt：2018/11/7
  */
 public class PermissionsManager {
     private final String TAG = getClass().getName();

@@ -16,17 +16,15 @@ import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
- * 包名：com.ykbjson.lib.simplepermission
- * 描述：
- * <p>This abstract class should be used to create an if/else action that the PermissionsManager
+ * Desription：<p>This abstract class should be used to create an if/else action that the PermissionsManager
  * can execute when the permissions you request are granted or denied. Simple use involves
  * creating an anonymous instance of it and passing that instance to the
  * requestPermissionsIfNecessaryForResult method. The result will be sent back to you as
  * either onGranted (all permissions have been granted), or onDenied (a required permission
  * has been denied). Ideally you put your functionality in the onGranted method and notify
  * the user what won't work in the onDenied method.</p>
- * 创建者：yankebin
- * 日期：2017/5/12
+ * Creator：yankebin
+ * CreatedAt：2018/11/7
  */
 public class PermissionsResultAction {
     private final String TAG = getClass().getName();
