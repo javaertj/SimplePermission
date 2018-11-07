@@ -12,7 +12,7 @@ publish {
     userOrg = 'ykbjson'      // bintray注册的用户名
     groupId = rootProject.ext.bintray.group
     artifactId = 'simplepermission'// bintray创建的package
-    publishVersion = rootProject.ext.bintray.version
+    publishVersion = rootProject.ext.bintray.libraryVersion
     desc = 'SimplePermission权限申请库核心代码'
 }
 

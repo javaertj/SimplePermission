@@ -53,8 +53,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             requestPermissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.READ_CONTACTS}
+                    ,needReCall = true
     )
-    private void setText(String text) {
+    private void setText(final String text) {
         mTextMessage.setText(text);
     }
 
@@ -62,4 +63,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         setText("哈哈哈哈哈哈");
     }
+
 }
