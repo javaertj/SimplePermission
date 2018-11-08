@@ -13,7 +13,7 @@
 	        jcenter()
 	        mavenCentral()
 	        mavenLocal()
-	        //这这我bintrary的maven地址
+	        //这是我bintray的maven地址
 	        maven { url 'https://dl.bintray.com/ykbjson/maven' }
 	    }
 	    dependencies {
@@ -30,7 +30,7 @@
 	        jcenter()
 	        mavenCentral()
 	        mavenLocal()
-	        //这这我bintrary的maven地址
+	        //这是我bintray的maven地址
 	        maven { url 'https://dl.bintray.com/ykbjson/maven' }
 	    }
 	}
@@ -234,7 +234,7 @@
 
 ## License
 
-'
+
 
 	Copyright 2018 ykbjson
 	
@@ -251,5 +251,5 @@
 	limitations under the License.	
 
 
-'
+
 
