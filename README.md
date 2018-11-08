@@ -231,6 +231,7 @@
 
 ##### 4.3 本库因为修改了class文件插入了一些代码，很有可能会使应用程序出现multiDex异常，所以，在需要的时候，最好让你的程序支持multiDex
 
+##### 4.4 多个添加了@PermissionRequest注解的方法的requestCode千万不要相同，不然程序会无法运行
 
 ## License
 
