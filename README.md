@@ -1,6 +1,10 @@
 # 一、SimplePermission简介
 基于注解调用的Android权限申请库,无需你手写申请权限的代码，也无需你在Activity或Fragment的onRequestPermissionsResult方法里写任何代码，只需在需要申请权限的类和方法上加上对应的注解即可，简单易用。
 
+关于本库的介绍和思路请戳
+
+[Android权限管理的探索](https://ykbjson.github.io/2018/11/08/Android%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86%E7%9A%84%E6%8E%A2%E7%B4%A2/)
+
 # 二、如何引用
 因为这个功能是基于gradle插件来实现的，所以和一般权限库有所不同,需要在你的工程根目录的build.gradle文件相似位置里加上如下代码（看有注释的地方）。当前最新版本为
 [ ![Download](https://api.bintray.com/packages/ykbjson/maven/simplepermissionplugin/images/download.svg) ](https://bintray.com/ykbjson/maven/simplepermissionplugin/_latestVersion)
