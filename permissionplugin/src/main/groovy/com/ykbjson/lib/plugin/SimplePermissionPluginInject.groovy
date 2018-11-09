@@ -6,13 +6,14 @@ import javassist.*
 import org.gradle.api.Project
 
 public class SimplePermissionPluginInject {
-    Map<String, List<Object>> map = new HashMap<>();
+
     private static final ClassPool pool = ClassPool.getDefault()
 
     private static final String PACKAGE_STAT = "com"
     private static final int CLASS_LENGTH = ".class".length() //6
     private static final String INJECT_PERMISSION_NOTIFY_METHOD_NAME = "onRequestPermissionsResult"
-
+    private static
+    final String INJECT_PERMISSION_REQUEST_METHOD_PARAMS_FIELD_NAME = "requestPermissionMethodParams"
     private static
     final String PERMISSIONS_MANAGER_PATH = "com.ykbjson.lib.simplepermission.PermissionsManager"
     private static
@@ -46,6 +47,11 @@ public class SimplePermissionPluginInject {
     private static
     final String INJECT_PERMISSION_NOTIFY_CONTENT = "PermissionsManager.getInstance().notifyPermissionsChange(permissions,grantResults);\n"
 
+    private static final String ACTIVITY_PATH = "android.app.Activity"
+
+    private static final String FRAGMENT_PATH = "android.app.Fragment"
+
+    private static final String V4_FRAGMENT_PATH = "android.support.v4.app.Fragment"
 
     static def classPathList = new ArrayList<JarClassPath>()
 
@@ -81,6 +87,9 @@ public class SimplePermissionPluginInject {
         pool.importPackage(PERMISSIONS_PATH)
         pool.importPackage(PERMISSIONS_RESULT_ACTION_PATH)
         pool.importPackage(PERMISSIONS_REQUEST_CALLBACK_PATH)
+        pool.importPackage(ACTIVITY_PATH)
+        pool.importPackage(FRAGMENT_PATH)
+        pool.importPackage(V4_FRAGMENT_PATH)
         pool.importPackage("java.util.Map")
         pool.importPackage("java.util.HashMap")
         pool.importPackage("java.util.List")
@@ -108,10 +117,13 @@ public class SimplePermissionPluginInject {
             if (null == className || "" == className || className.contains("\$")) {
                 return
             }
-
             CtClass c = pool.getCtClass(className)
             //检验注解
             if (!c.hasAnnotation(PermissionNotify.class)) {
+                return
+            }
+            //不是activity或fragment不处理
+            if (!c.subclassOf(pool.get(ACTIVITY_PATH)) && !c.subclassOf(pool.get(FRAGMENT_PATH)) && !c.subclassOf(pool.get(V4_FRAGMENT_PATH))) {
                 return
             }
             try {
@@ -130,8 +142,11 @@ public class SimplePermissionPluginInject {
                     }
                 }
                 //加入存储方法的map结构
-                CtField ctField = CtField.make(REQUEST_PERMISSION_METHOD_PARAMS_INJECT_CONTENT, c)
-                c.addField(ctField)
+                CtField requestPermissionMethodParamsField = findFieldByName(c, INJECT_PERMISSION_REQUEST_METHOD_PARAMS_FIELD_NAME)
+                if (null == requestPermissionMethodParamsField) {
+                    requestPermissionMethodParamsField = CtField.make(REQUEST_PERMISSION_METHOD_PARAMS_INJECT_CONTENT, c)
+                    c.addField(requestPermissionMethodParamsField)
+                }
                 //检测Activity或Fragment是否声明或重写了onRequestPermissionsResult方法
                 CtMethod notifyMethod = findMethodByName(c, INJECT_PERMISSION_NOTIFY_METHOD_NAME)
                 //如果已经重写，则在super之前插入代码
@@ -159,7 +174,17 @@ public class SimplePermissionPluginInject {
                 //在加了PermissionRequest注解的方法内插入权限请求的代码，根据PermissionRequest.needReCall来决定是否需要在权限回调成功的方法里插入代码
                 for (CtMethod method : c.getDeclaredMethods()) {
                     PermissionRequest permissionRequest = method.getAnnotation(PermissionRequest.class)
+                    //没有注解的方法忽略
                     if (null == permissionRequest) {
+                        continue
+                    }
+                    project.logger.error "SimplePermission-----> method returnType : " + method.getReturnType().name
+                    //带返回值的方法暂时忽略
+                    if (!method.getReturnType().name.contains("void")) {
+                        continue
+                    }
+                    //静态方法忽略
+                    if (Modifier.isStatic(method.getModifiers())) {
                         continue
                     }
                     project.logger.error "SimplePermission-----> find requestPermission method : " + method.longName
@@ -177,7 +202,17 @@ public class SimplePermissionPluginInject {
                                 .append("\";\n")
                         eachIndex++
                     }
-                    requestMethodBuilder.append("final boolean hasPermissions = PermissionsManager.getInstance().hasAllPermissions(\$0,requestPermissions);\n")
+
+                    //因为前面已经排除了非Activity和Fragment的class
+                    boolean isActivity = c.subclassOf(pool.get(ACTIVITY_PATH))
+                    requestMethodBuilder.append("final boolean hasPermissions = PermissionsManager.getInstance().hasAllPermissions(")
+                    // $0代码的是this，$1代表方法参数的第一个参数、$2代表方法参数的第二个参数,以此类推，$N代表是方法参数的第N个。
+                            .append("\$0")
+                    if (!isActivity) {
+                        requestMethodBuilder.append(".getActivity()")
+                    }
+                    requestMethodBuilder.append(",")
+                            .append("requestPermissions );\n")
                             .append("if (!hasPermissions) {\n")
                     //如果需要在权限申请成功后继续执行此方法的逻辑代码，则需要存储参数
                     if (permissionRequest.needReCall()) {
@@ -232,7 +267,6 @@ public class SimplePermissionPluginInject {
                     requestMethodBuilder.append("PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(")
                             .append(permissionRequest.requestCode())//requestCode
                             .append(",")
-                    // $0代码的是this，$1代表方法参数的第一个参数、$2代表方法参数的第二个参数,以此类推，$N代表是方法参数的第N个。
                             .append("\$0,")
                             .append("requestPermissions,")
                             .append("\$0);\n")
@@ -260,6 +294,15 @@ public class SimplePermissionPluginInject {
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             if (method.getLongName().contains(methodName)) {
                 return method
+            }
+        }
+        return null
+    }
+
+    static CtField findFieldByName(CtClass ctClass, String fieldName) {
+        for (CtField field : ctClass.getDeclaredFields()) {
+            if (field.getName().equals(fieldName)) {
+                return field
             }
         }
         return null

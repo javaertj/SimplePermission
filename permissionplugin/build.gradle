@@ -1,8 +1,10 @@
 apply plugin: 'groovy'
 apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'maven'
+
 //加载资源
 Properties properties = new Properties()
-InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream();
+InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
 properties.load(inputStream)
 
 publish {
@@ -20,6 +22,24 @@ compileGroovy {
     targetCompatibility = 1.7
 }
 
+//group和version
+group=rootProject.ext.bintray.group
+version=rootProject.ext.bintray.plugVersion
+
+//打包到本地或者远程Maven库
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            //提交到远程服务器：
+            // repository(url: "http://www.xxx.com/repos") {
+            //    authentication(userName: "admin", password: "admin")
+            // }
+            //本地的Maven地址设置为E:/Maven
+            repository(url: uri('/Users/yanan/Desktop/android_project/mavenlocal/'))
+        }
+    }
+}
+
 dependencies {
     //gradle sdk
     compile gradleApi()
@@ -29,5 +49,9 @@ dependencies {
     compile 'com.ykbjson.simplepermission:simplepermission_ano:1.0.0'
     compile 'com.android.tools.build:gradle:3.1.1'
     compile 'org.javassist:javassist:3.23.0-GA'
+}
+
+repositories {
+    mavenCentral()
 }
 

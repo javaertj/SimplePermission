@@ -305,6 +305,45 @@ public class PermissionsManager {
         }
     }
 
+
+    /**
+     * This method should be used to execute a {@link PermissionsResultAction} for the array
+     * of permissions passed to this method. This method will request the permissions if
+     * they need to be requested (i.e. we don't have permission yet) and will add the
+     * PermissionsResultAction to the queue to be notified of permissions being granted or
+     * denied. In the case of pre-Android Marshmallow, permissions will be granted immediately.
+     * The Fragment variable is used, but if {@link android.app.Fragment#getActivity()} returns null, this method
+     * will fail to work as the activity reference is necessary to check for permissions.
+     *
+     * @param requestCode the permissions requestCode
+     * @param fragment    the android.app.fragment necessary to request the permissions.
+     * @param permissions the list of permissions to request for the {@link PermissionsResultAction}.
+     * @param callback    the PermissionsRequestCallback to notify when the permissions are granted or denied.
+     */
+    public synchronized void requestPermissionsIfNecessaryForResult(int requestCode, @NonNull android.app.Fragment fragment,
+                                                                    @NonNull String[] permissions,
+                                                                    @Nullable PermissionsRequestCallback callback) {
+        Activity activity = fragment.getActivity();
+        if (activity == null) {
+            return;
+        }
+        final PermissionsResultAction action = new PermissionsResultAction(requestCode, callback);
+        addPendingAction(permissions, action);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            doPermissionWorkBeforeAndroidM(activity, permissions, action);
+        } else {
+            List<String> permList = getPermissionsListToRequest(activity, permissions, action);
+            if (permList.isEmpty()) {
+                //if there is no permission to request, there is no reason to keep the action int the list
+                removePendingAction(action);
+            } else {
+                String[] permsToRequest = permList.toArray(new String[permList.size()]);
+                mPendingRequests.addAll(permList);
+                fragment.requestPermissions(permsToRequest, 1);
+            }
+        }
+    }
+
     /**
      * This method notifies the PermissionsManager that the permissions have change. If you are making
      * the permissions requests using an Activity, then this method should be called from the

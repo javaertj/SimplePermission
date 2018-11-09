@@ -7,14 +7,14 @@ buildscript {
         jcenter()
         mavenCentral()
         mavenLocal()
-//        maven {//本地Maven仓库地址
-//            url uri('/Users/yanan/Desktop/android_project/mavenlocal/')
-//        }
+        maven {//本地Maven仓库地址
+            url uri('/Users/yanan/Desktop/android_project/mavenlocal/')
+        }
         maven { url 'https://dl.bintray.com/ykbjson/maven' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.1'
-        classpath 'com.ykbjson.simplepermission:simplepermissionplugin:1.0.0'
+        classpath 'com.ykbjson.simplepermission:simplepermissionplugin:1.0.1'
         classpath 'com.novoda:bintray-release:0.8.1'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
@@ -29,9 +29,9 @@ allprojects {
         jcenter()
         mavenCentral()
         mavenLocal()
-//        maven {//本地Maven仓库地址
-//            url uri('/Users/yanan/Desktop/android_project/mavenlocal/')
-//        }
+        maven {//本地Maven仓库地址
+            url uri('/Users/yanan/Desktop/android_project/mavenlocal/')
+        }
         maven { url 'https://dl.bintray.com/ykbjson/maven' }
     }
 }

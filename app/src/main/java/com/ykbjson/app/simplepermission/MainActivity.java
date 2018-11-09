@@ -1,6 +1,7 @@
 package com.ykbjson.app.simplepermission;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     ,needReCall = true
     )
     private void setText(final String text) {
-        mTextMessage.setText(text);
+       startActivity(new Intent(this,SecondActivity.class).putExtra("text",text));
     }
 
     @Override

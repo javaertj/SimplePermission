@@ -20,9 +20,9 @@ ext {
     ]
 
     bintray = [
-            plugVersion   : '1.0.0',
+            plugVersion   : '1.0.1',
             anoVersion    : '1.0.0',
-            libraryVersion: '1.0.0',
+            libraryVersion: '1.0.1',
 
             siteUrl       : 'https://github.com/ykbjson/SimplePermission',
             gitUrl        : 'https://github.com/ykbjson/SimplePermission.git',
