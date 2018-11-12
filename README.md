@@ -237,7 +237,7 @@ Android M及以上版本，需要在Activit或Fragment重载onRequestPermissions
 
 ##### 4.4 本库因为修改了class文件插入了一些代码，很有可能会使应用程序出现multiDex异常，所以，在需要的时候，最好让你的程序支持multiDex
 
-##### 4.5 多个添加了@PermissionRequest注解的方法的requestCode千万不要相同，不然程序会无法运行
+##### 4.5 多个添加了@PermissionRequest注解的方法的requestCode千万不要相同，不然在权限申请成功回调的地方获取申请权限方法的参数会出现问题，导致你的程序会出现一些无法预知的错误
 
 ## License
 
