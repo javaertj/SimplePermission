@@ -23,7 +23,7 @@
 	    dependencies {
 	        classpath 'com.android.tools.build:gradle:3.1.1'
 	        //这是simplepermissionplugin的classpath
-	        classpath 'com.ykbjson.simplepermission:simplepermissionplugin:1.0.0'
+	        classpath 'com.ykbjson.simplepermission:simplepermissionplugin:1.0.1'
 	  }
 	}
 
@@ -53,7 +53,7 @@
 
 
 
-	implementation 'com.ykbjson.simplepermission:simplepermission:1.0.0'
+	implementation 'com.ykbjson.simplepermission:simplepermission:1.0.1'
     implementation 'com.ykbjson.simplepermission:simplepermission_ano:1.0.0'
 	
 
@@ -214,7 +214,7 @@
 	
 
 
-对于一些特殊权限，可能需要在Activit或Fragment重载onRequestPermissionsResult方法，并且在该方法内部加入PermissionsManager.getInstance().notifyPermissionsChange(permissions,grantResults),类似如下代码
+Android M及以上版本，需要在Activit或Fragment重载onRequestPermissionsResult方法，并且在该方法内部加入PermissionsManager.getInstance().notifyPermissionsChange(permissions,grantResults),类似如下代码
 
 
 
@@ -233,9 +233,11 @@
 
 ##### 4.2 本库目前还不支持在内部类里面的方法上加@PermissionRequest注解，因为permission权限申请库必要的一个参数是Activit或Fragment，如果是在内部类里面使用，我目前还无法得知如何获取该内部类持有的Activit或Fragment，尤其是在多层内部类嵌套的时候。
 
-##### 4.3 本库因为修改了class文件插入了一些代码，很有可能会使应用程序出现multiDex异常，所以，在需要的时候，最好让你的程序支持multiDex
+##### 4.3 本库目前还不支持在static方法上添加@PermissionRequest注解，因为用javassit插入“MainActivity.this”类似语句会报错，我暂时还没找到解决办法
 
-##### 4.4 多个添加了@PermissionRequest注解的方法的requestCode千万不要相同，不然程序会无法运行
+##### 4.4 本库因为修改了class文件插入了一些代码，很有可能会使应用程序出现multiDex异常，所以，在需要的时候，最好让你的程序支持multiDex
+
+##### 4.5 多个添加了@PermissionRequest注解的方法的requestCode千万不要相同，不然在权限申请成功回调的地方获取申请权限方法的参数会出现问题，导致你的程序会出现一些无法预知的错误
 
 ## License
 
