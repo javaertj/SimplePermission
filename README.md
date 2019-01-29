@@ -3,7 +3,9 @@
 
 关于本库的介绍和思路请戳
 
-[Android权限管理的探索](https://ykbjson.github.io/2018/11/08/Android%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86%E7%9A%84%E6%8E%A2%E7%B4%A2/)
+[Android权限管理的探索-csdn](https://blog.csdn.net/yankebin/article/details/83863684)
+
+[Android权限管理的探索-github博客](https://ykbjson.github.io/2018/11/08/Android%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86%E7%9A%84%E6%8E%A2%E7%B4%A2/)
 
 # 二、如何引用
 因为这个功能是基于gradle插件来实现的，所以和一般权限库有所不同,需要在你的工程根目录的build.gradle文件相似位置里加上如下代码（看有注释的地方）。当前最新版本为
