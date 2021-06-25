@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 //com.hc.gradle为resources/META-INF/gradle-plugins
 //permissionplugin下的properties文件名称
-apply plugin: 'com.ykbjson.simplepermission'
+//apply plugin: 'com.ykbjson.simplepermission'
 
 android {
     compileSdkVersion 27
@@ -24,8 +24,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.ykbjson.simplepermission:simplepermission:1.0.1'
-    implementation 'com.ykbjson.simplepermission:simplepermission_ano:1.0.0'
+//    implementation 'com.ykbjson.simplepermission:simplepermission:1.0.1'
+//    implementation 'com.ykbjson.simplepermission:simplepermission_ano:1.0.0'
+
+    implementation project(':simplepermission')
+    implementation project(':simplepermission_ano')
 
     implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.android.support:design:27.0.2'

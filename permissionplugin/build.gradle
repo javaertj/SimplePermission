@@ -45,8 +45,8 @@ dependencies {
     compile gradleApi()
     //groovy sdk
     compile localGroovy()
-//    compile project(':simplepermission_ano')
-    compile 'com.ykbjson.simplepermission:simplepermission_ano:1.0.0'
+    compile project(':simplepermission_ano')
+//    compile 'com.ykbjson.simplepermission:simplepermission_ano:1.0.0'
     compile 'com.android.tools.build:gradle:3.1.1'
     compile 'org.javassist:javassist:3.23.0-GA'
 }
