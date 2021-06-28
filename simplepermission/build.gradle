@@ -18,6 +18,10 @@ publish {
     desc = 'SimplePermission权限申请库核心代码'
 }
 
+//group和version
+group=rootProject.ext.bintray.group
+version=rootProject.ext.bintray.plugVersion
+
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
 

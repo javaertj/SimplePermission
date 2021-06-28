@@ -27,28 +27,28 @@ group=rootProject.ext.bintray.group
 version=rootProject.ext.bintray.plugVersion
 
 //打包到本地或者远程Maven库
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            //提交到远程服务器：
-            // repository(url: "http://www.xxx.com/repos") {
-            //    authentication(userName: "admin", password: "admin")
-            // }
-            //本地的Maven地址设置为E:/Maven
-            repository(url: uri('/Users/yanan/Desktop/android_project/mavenlocal/'))
-        }
-    }
-}
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            //提交到远程服务器：
+//            // repository(url: "http://www.xxx.com/repos") {
+//            //    authentication(userName: "admin", password: "admin")
+//            // }
+//            //本地的Maven地址设置为E:/Maven
+//            repository(url: uri('/Users/yanan/Desktop/android_project/mavenlocal/'))
+//        }
+//    }
+//}
 
 dependencies {
     //gradle sdk
-    compile gradleApi()
+    implementation gradleApi()
     //groovy sdk
-    compile localGroovy()
-    compile project(':simplepermission_ano')
+    implementation localGroovy()
+    implementation project(':simplepermission_ano')
 //    compile 'com.ykbjson.simplepermission:simplepermission_ano:1.0.0'
-    compile 'com.android.tools.build:gradle:3.1.1'
-    compile 'org.javassist:javassist:3.23.0-GA'
+    implementation 'com.android.tools.build:gradle:3.1.1'
+    implementation 'org.javassist:javassist:3.23.0-GA'
 }
 
 repositories {
